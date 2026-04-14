@@ -1,0 +1,850 @@
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { ArrowLeft, Save, Palette } from "lucide-react";
+import API from "../../api/api";
+import { Settings, DEFAULTS } from "../../hooks/useSettings";
+
+const COLOR_TYPES = [
+    { key: 'bg', label: 'Background', default: '#f8fafc' },
+    { key: 'surface', label: 'Surface', default: '#ffffff' },
+    { key: 'text', label: 'Text', default: '#0f172a' },
+    { key: 'text_secondary', label: 'Secondary Text', default: '#334155' },
+    { key: 'accent', label: 'Accent', default: '#1e40af' },
+    { key: 'input_bg', label: 'Input Background', default: '#ffffff' },
+    { key: 'input_border', label: 'Input Border', default: '#cbd5e1' },
+    { key: 'input_text', label: 'Input Text', default: '#0f172a' },
+    { key: 'button_primary', label: 'Primary Button', default: '#1e40af' },
+    { key: 'button_secondary', label: 'Secondary Button', default: '#64748b' },
+    { key: 'card_bg', label: 'Card Background', default: '#ffffff' },
+    { key: 'card_border', label: 'Card Border', default: '#cbd5e1' }
+];
+    {
+        id: "light",
+        name: "Light Mode",
+        description: "Clean light mode with charcoal text, soft surfaces, and calm accents.",
+        preview: {
+            primary: "#111827",
+            accent: "#2563eb",
+            background: "#f8fafc",
+            surface: "#ffffff",
+            text: "#111827"
+        },
+        home: {
+            home_theme_primary: "#0f172a",
+            home_theme_accent: "#1e40af",
+            home_theme_bg: "#f8fafc",
+            home_theme_surface: "#ffffff",
+            home_theme_text: "#0f172a",
+            home_theme_text_secondary: "#334155",
+            home_theme_input_bg: "#ffffff",
+            home_theme_input_border: "#cbd5e1",
+            home_theme_input_text: "#0f172a",
+            home_theme_button_primary: "#1e40af",
+            home_theme_button_secondary: "#64748b",
+            home_theme_card_bg: "#ffffff",
+            home_theme_card_border: "#cbd5e1",
+        },
+        admin: {
+            admin_theme_primary: "#0f172a",
+            admin_theme_accent: "#1e40af",
+            admin_theme_bg: "#f8fafc",
+            admin_theme_surface: "#ffffff",
+            admin_theme_text: "#0f172a",
+            admin_theme_text_secondary: "#334155",
+            admin_theme_input_bg: "#ffffff",
+            admin_theme_input_border: "#cbd5e1",
+            admin_theme_input_text: "#0f172a",
+            admin_theme_button_primary: "#1e40af",
+            admin_theme_button_secondary: "#64748b",
+            admin_theme_card_bg: "#ffffff",
+            admin_theme_card_border: "#cbd5e1",
+        },
+    },
+    {
+        id: "midnight-noir",
+        name: "Midnight Noir",
+        description: "Dark theme with violet accents for an elegant storefront.",
+        preview: {
+            primary: "#111827",
+            accent: "#8b5cf6",
+            background: "#020617",
+            surface: "#0f172a",
+            text: "#f8fafc"
+        },
+        home: {
+            home_theme_primary: "#111827",
+            home_theme_accent: "#8b5cf6",
+            home_theme_bg: "#020617",
+            home_theme_surface: "#0f172a",
+            home_theme_text: "#f8fafc",
+            home_theme_text_secondary: "#94a3b8",
+            home_theme_input_bg: "#0f172a",
+            home_theme_input_border: "#334155",
+            home_theme_input_text: "#ffffff",
+            home_theme_button_primary: "#8b5cf6",
+            home_theme_button_secondary: "#334155",
+            home_theme_card_bg: "#0f172a",
+            home_theme_card_border: "#1e293b",
+        },
+        admin: {
+            admin_theme_primary: "#1e293b",
+            admin_theme_accent: "#8b5cf6",
+            admin_theme_bg: "#f8fafc",
+            admin_theme_surface: "#ffffff",
+            admin_theme_text: "#1e293b",
+            admin_theme_text_secondary: "#64748b",
+            admin_theme_input_bg: "#ffffff",
+            admin_theme_input_border: "#e2e8f0",
+            admin_theme_input_text: "#1e293b",
+            admin_theme_button_primary: "#8b5cf6",
+            admin_theme_button_secondary: "#64748b",
+            admin_theme_card_bg: "#ffffff",
+            admin_theme_card_border: "#e2e8f0",
+        },
+    },
+    {
+        id: "sunset-glow",
+        name: "Sunset Glow",
+        description: "Warm orange and blush hues with soft ivory contrast.",
+        preview: {
+            primary: "#4b2c20",
+            accent: "#f97316",
+            background: "#fff7ed",
+            surface: "#f8e7d7",
+            text: "#1f2937"
+        },
+        home: {
+            home_theme_primary: "#4b2c20",
+            home_theme_accent: "#f97316",
+            home_theme_bg: "#fff7ed",
+            home_theme_surface: "#f8e7d7",
+            home_theme_text: "#1f2937",
+            home_theme_text_secondary: "#6b7280",
+            home_theme_input_bg: "#f8e7d7",
+            home_theme_input_border: "#d97706",
+            home_theme_input_text: "#1f2937",
+            home_theme_button_primary: "#f97316",
+            home_theme_button_secondary: "#d97706",
+            home_theme_card_bg: "#f8e7d7",
+            home_theme_card_border: "#fed7aa",
+        },
+        admin: {
+            admin_theme_primary: "#4b2c20",
+            admin_theme_accent: "#f97316",
+            admin_theme_bg: "#fef3c7",
+            admin_theme_surface: "#ffffff",
+            admin_theme_text: "#4b2c20",
+            admin_theme_text_secondary: "#92400e",
+            admin_theme_input_bg: "#ffffff",
+            admin_theme_input_border: "#fed7aa",
+            admin_theme_input_text: "#4b2c20",
+            admin_theme_button_primary: "#f97316",
+            admin_theme_button_secondary: "#92400e",
+            admin_theme_card_bg: "#ffffff",
+            admin_theme_card_border: "#fed7aa",
+        },
+    },
+    {
+        id: "coastal-calm",
+        name: "Coastal Calm",
+        description: "Fresh blue tones with crisp ocean background and white text.",
+        preview: {
+            primary: "#0c5c91",
+            accent: "#14b8a6",
+            background: "#e0f2fe",
+            surface: "#bae6fd",
+            text: "#0f172a"
+        },
+        home: {
+            home_theme_primary: "#0c5c91",
+            home_theme_accent: "#14b8a6",
+            home_theme_bg: "#e0f2fe",
+            home_theme_surface: "#bae6fd",
+            home_theme_text: "#0f172a",
+            home_theme_text_secondary: "#0369a1",
+            home_theme_input_bg: "#bae6fd",
+            home_theme_input_border: "#0284c7",
+            home_theme_input_text: "#0f172a",
+            home_theme_button_primary: "#14b8a6",
+            home_theme_button_secondary: "#0284c7",
+            home_theme_card_bg: "#bae6fd",
+            home_theme_card_border: "#7dd3fc",
+        },
+        admin: {
+            admin_theme_primary: "#0c5c91",
+            admin_theme_accent: "#14b8a6",
+            admin_theme_bg: "#f0f9ff",
+            admin_theme_surface: "#ffffff",
+            admin_theme_text: "#0c5c91",
+            admin_theme_text_secondary: "#0369a1",
+            admin_theme_input_bg: "#ffffff",
+            admin_theme_input_border: "#bae6fd",
+            admin_theme_input_text: "#0c5c91",
+            admin_theme_button_primary: "#14b8a6",
+            admin_theme_button_secondary: "#0369a1",
+            admin_theme_card_bg: "#ffffff",
+            admin_theme_card_border: "#bae6fd",
+        },
+    },
+    {
+        id: "forest-luxe",
+        name: "Forest Luxe",
+        description: "Deep green and gold for a premium natural palette.",
+        preview: {
+            primary: "#12381f",
+            accent: "#f59e0b",
+            background: "#eefbe7",
+            surface: "#d9f7d8",
+            text: "#111827"
+        },
+        home: {
+            home_theme_primary: "#12381f",
+            home_theme_accent: "#f59e0b",
+            home_theme_bg: "#eefbe7",
+            home_theme_surface: "#d9f7d8",
+            home_theme_text: "#111827",
+            home_theme_text_secondary: "#166534",
+            home_theme_input_bg: "#d9f7d8",
+            home_theme_input_border: "#16a34a",
+            home_theme_input_text: "#111827",
+            home_theme_button_primary: "#f59e0b",
+            home_theme_button_secondary: "#16a34a",
+            home_theme_card_bg: "#d9f7d8",
+            home_theme_card_border: "#bbf7d0",
+        },
+        admin: {
+            admin_theme_primary: "#12381f",
+            admin_theme_accent: "#f59e0b",
+            admin_theme_bg: "#f7fee7",
+            admin_theme_surface: "#ffffff",
+            admin_theme_text: "#12381f",
+            admin_theme_text_secondary: "#166534",
+            admin_theme_input_bg: "#ffffff",
+            admin_theme_input_border: "#d9f7d8",
+            admin_theme_input_text: "#12381f",
+            admin_theme_button_primary: "#f59e0b",
+            admin_theme_button_secondary: "#166534",
+            admin_theme_card_bg: "#ffffff",
+            admin_theme_card_border: "#d9f7d8",
+        },
+    },
+    {
+        id: "modern-slate",
+        name: "Modern Slate",
+        description: "Clean slate gray with electric blue accents.",
+        preview: {
+            primary: "#334155",
+            accent: "#06b6d4",
+            background: "#f8fafc",
+            surface: "#ffffff",
+            text: "#1e293b"
+        },
+        home: {
+            home_theme_primary: "#334155",
+            home_theme_accent: "#06b6d4",
+            home_theme_bg: "#0f172a",
+            home_theme_surface: "#1e293b",
+            home_theme_text: "#f1f5f9",
+            home_theme_text_secondary: "#94a3b8",
+            home_theme_input_bg: "#1e293b",
+            home_theme_input_border: "#475569",
+            home_theme_input_text: "#f1f5f9",
+            home_theme_button_primary: "#06b6d4",
+            home_theme_button_secondary: "#475569",
+            home_theme_card_bg: "#1e293b",
+            home_theme_card_border: "#334155",
+        },
+        admin: {
+            admin_theme_primary: "#334155",
+            admin_theme_accent: "#06b6d4",
+            admin_theme_bg: "#f8fafc",
+            admin_theme_surface: "#ffffff",
+            admin_theme_text: "#334155",
+            admin_theme_text_secondary: "#64748b",
+            admin_theme_input_bg: "#ffffff",
+            admin_theme_input_border: "#e2e8f0",
+            admin_theme_input_text: "#334155",
+            admin_theme_button_primary: "#06b6d4",
+            admin_theme_button_secondary: "#64748b",
+            admin_theme_card_bg: "#ffffff",
+            admin_theme_card_border: "#e2e8f0",
+        },
+    },
+    {
+        id: "royal-purple",
+        name: "Royal Purple",
+        description: "Luxurious purple and gold combination.",
+        preview: {
+            primary: "#581c87",
+            accent: "#d946ef",
+            background: "#faf5ff",
+            surface: "#f3e8ff",
+            text: "#1e1b4b"
+        },
+        home: {
+            home_theme_primary: "#581c87",
+            home_theme_accent: "#d946ef",
+            home_theme_bg: "#1e1b4b",
+            home_theme_surface: "#312e81",
+            home_theme_text: "#f5f3ff",
+            home_theme_text_secondary: "#c4b5fd",
+            home_theme_input_bg: "#312e81",
+            home_theme_input_border: "#7c3aed",
+            home_theme_input_text: "#f5f3ff",
+            home_theme_button_primary: "#d946ef",
+            home_theme_button_secondary: "#7c3aed",
+            home_theme_card_bg: "#312e81",
+            home_theme_card_border: "#581c87",
+        },
+        admin: {
+            admin_theme_primary: "#581c87",
+            admin_theme_accent: "#d946ef",
+            admin_theme_bg: "#faf5ff",
+            admin_theme_surface: "#ffffff",
+            admin_theme_text: "#581c87",
+            admin_theme_text_secondary: "#7c3aed",
+            admin_theme_input_bg: "#ffffff",
+            admin_theme_input_border: "#e9d5ff",
+            admin_theme_input_text: "#581c87",
+            admin_theme_button_primary: "#d946ef",
+            admin_theme_button_secondary: "#7c3aed",
+            admin_theme_card_bg: "#ffffff",
+            admin_theme_card_border: "#e9d5ff",
+        },
+    },
+    {
+        id: "sunset-glow",
+        name: "Sunset Glow",
+        description: "Warm orange and blush hues with soft ivory contrast.",
+        preview: {
+            primary: "#4b2c20",
+            accent: "#f97316",
+            background: "#fff7ed",
+            surface: "#f8e7d7",
+            text: "#1f2937"
+        },
+        home: {
+            home_theme_primary: "#4b2c20",
+            home_theme_accent: "#f97316",
+            home_theme_bg: "#fff7ed",
+            home_theme_surface: "#f8e7d7",
+            home_theme_text: "#1f2937",
+            home_theme_text_secondary: "#6b7280",
+            home_theme_input_bg: "#f8e7d7",
+            home_theme_input_border: "#d97706",
+            home_theme_input_text: "#1f2937",
+            home_theme_button_primary: "#f97316",
+            home_theme_button_secondary: "#d97706",
+            home_theme_card_bg: "#f8e7d7",
+            home_theme_card_border: "#fed7aa",
+        },
+        admin: {
+            admin_theme_primary: "#4b2c20",
+            admin_theme_accent: "#f97316",
+            admin_theme_bg: "#fef3c7",
+            admin_theme_surface: "#ffffff",
+            admin_theme_text: "#4b2c20",
+            admin_theme_text_secondary: "#92400e",
+            admin_theme_input_bg: "#ffffff",
+            admin_theme_input_border: "#fed7aa",
+            admin_theme_input_text: "#4b2c20",
+            admin_theme_button_primary: "#f97316",
+            admin_theme_button_secondary: "#92400e",
+            admin_theme_card_bg: "#ffffff",
+            admin_theme_card_border: "#fed7aa",
+        },
+    },
+    {
+        id: "coastal-calm",
+        name: "Coastal Calm",
+        description: "Fresh blue tones with crisp ocean background and white text.",
+        preview: {
+            primary: "#0c5c91",
+            accent: "#14b8a6",
+            background: "#e0f2fe",
+            surface: "#bae6fd",
+            text: "#0f172a"
+        },
+        home: {
+            home_theme_primary: "#0c5c91",
+            home_theme_accent: "#14b8a6",
+            home_theme_bg: "#e0f2fe",
+            home_theme_surface: "#bae6fd",
+            home_theme_text: "#0f172a",
+            home_theme_text_secondary: "#0369a1",
+            home_theme_input_bg: "#bae6fd",
+            home_theme_input_border: "#0284c7",
+            home_theme_input_text: "#0f172a",
+            home_theme_button_primary: "#14b8a6",
+            home_theme_button_secondary: "#0284c7",
+            home_theme_card_bg: "#bae6fd",
+            home_theme_card_border: "#7dd3fc",
+        },
+        admin: {
+            admin_theme_primary: "#0c5c91",
+            admin_theme_accent: "#14b8a6",
+            admin_theme_bg: "#f0f9ff",
+            admin_theme_surface: "#ffffff",
+            admin_theme_text: "#0c5c91",
+            admin_theme_text_secondary: "#0369a1",
+            admin_theme_input_bg: "#ffffff",
+            admin_theme_input_border: "#bae6fd",
+            admin_theme_input_text: "#0c5c91",
+            admin_theme_button_primary: "#14b8a6",
+            admin_theme_button_secondary: "#0369a1",
+            admin_theme_card_bg: "#ffffff",
+            admin_theme_card_border: "#bae6fd",
+        },
+    },
+    {
+        id: "forest-luxe",
+        name: "Forest Luxe",
+        description: "Deep green and gold for a premium natural palette.",
+        preview: {
+            primary: "#12381f",
+            accent: "#f59e0b",
+            background: "#eefbe7",
+            surface: "#d9f7d8",
+            text: "#111827"
+        },
+        home: {
+            home_theme_primary: "#12381f",
+            home_theme_accent: "#f59e0b",
+            home_theme_bg: "#eefbe7",
+            home_theme_surface: "#d9f7d8",
+            home_theme_text: "#111827",
+            home_theme_text_secondary: "#166534",
+            home_theme_input_bg: "#d9f7d8",
+            home_theme_input_border: "#16a34a",
+            home_theme_input_text: "#111827",
+            home_theme_button_primary: "#f59e0b",
+            home_theme_button_secondary: "#16a34a",
+            home_theme_card_bg: "#d9f7d8",
+            home_theme_card_border: "#bbf7d0",
+        },
+        admin: {
+            admin_theme_primary: "#12381f",
+            admin_theme_accent: "#f59e0b",
+            admin_theme_bg: "#f7fee7",
+            admin_theme_surface: "#ffffff",
+            admin_theme_text: "#12381f",
+            admin_theme_text_secondary: "#166534",
+            admin_theme_input_bg: "#ffffff",
+            admin_theme_input_border: "#d9f7d8",
+            admin_theme_input_text: "#12381f",
+            admin_theme_button_primary: "#f59e0b",
+            admin_theme_button_secondary: "#166534",
+            admin_theme_card_bg: "#ffffff",
+            admin_theme_card_border: "#d9f7d8",
+        },
+    },
+    {
+        id: "modern-slate",
+        name: "Modern Slate",
+        description: "Clean slate gray with electric blue accents.",
+        preview: {
+            primary: "#334155",
+            accent: "#06b6d4",
+            background: "#f8fafc",
+            surface: "#ffffff",
+            text: "#1e293b"
+        },
+        home: {
+            home_theme_primary: "#334155",
+            home_theme_accent: "#06b6d4",
+            home_theme_bg: "#0f172a",
+            home_theme_surface: "#1e293b",
+            home_theme_text: "#f1f5f9",
+            home_theme_text_secondary: "#94a3b8",
+            home_theme_input_bg: "#1e293b",
+            home_theme_input_border: "#475569",
+            home_theme_input_text: "#f1f5f9",
+            home_theme_button_primary: "#06b6d4",
+            home_theme_button_secondary: "#475569",
+            home_theme_card_bg: "#1e293b",
+            home_theme_card_border: "#334155",
+        },
+        admin: {
+            admin_theme_primary: "#334155",
+            admin_theme_accent: "#06b6d4",
+            admin_theme_bg: "#f8fafc",
+            admin_theme_surface: "#ffffff",
+            admin_theme_text: "#334155",
+            admin_theme_text_secondary: "#64748b",
+            admin_theme_input_bg: "#ffffff",
+            admin_theme_input_border: "#e2e8f0",
+            admin_theme_input_text: "#334155",
+            admin_theme_button_primary: "#06b6d4",
+            admin_theme_button_secondary: "#64748b",
+            admin_theme_card_bg: "#ffffff",
+            admin_theme_card_border: "#e2e8f0",
+        },
+    },
+    {
+        id: "royal-purple",
+        name: "Royal Purple",
+        description: "Luxurious purple and gold combination.",
+        preview: {
+            primary: "#581c87",
+            accent: "#d946ef",
+            background: "#faf5ff",
+            surface: "#f3e8ff",
+            text: "#1e1b4b"
+        },
+        home: {
+            home_theme_primary: "#581c87",
+            home_theme_accent: "#d946ef",
+            home_theme_bg: "#1e1b4b",
+            home_theme_surface: "#312e81",
+            home_theme_text: "#f5f3ff",
+            home_theme_text_secondary: "#c4b5fd",
+            home_theme_input_bg: "#312e81",
+            home_theme_input_border: "#7c3aed",
+            home_theme_input_text: "#f5f3ff",
+            home_theme_button_primary: "#d946ef",
+            home_theme_button_secondary: "#7c3aed",
+            home_theme_card_bg: "#312e81",
+            home_theme_card_border: "#581c87",
+        },
+        admin: {
+            admin_theme_primary: "#581c87",
+            admin_theme_accent: "#d946ef",
+            admin_theme_bg: "#faf5ff",
+            admin_theme_surface: "#ffffff",
+            admin_theme_text: "#581c87",
+            admin_theme_text_secondary: "#7c3aed",
+            admin_theme_input_bg: "#ffffff",
+            admin_theme_input_border: "#e9d5ff",
+            admin_theme_input_text: "#581c87",
+            admin_theme_button_primary: "#d946ef",
+            admin_theme_button_secondary: "#7c3aed",
+            admin_theme_card_bg: "#ffffff",
+            admin_theme_card_border: "#e9d5ff",
+        },
+    }
+];
+
+const LEGACY_THEME_MAP: Record<string, string> = {
+    "midnight-noir": "black",
+    "modern-slate": "black",
+    "royal-purple": "black",
+    "forest-luxe": "light",
+    "coastal-calm": "light",
+    "sunset-glow": "light",
+};
+
+const AppearanceSettings = () => {
+    const navigate = useNavigate();
+    const [s, setS] = useState<Settings>(DEFAULTS);
+    const [saved, setSaved] = useState(false);
+    const [loading, setLoading] = useState(true);
+    const [selectedTheme, setSelectedTheme] = useState<string>("");
+
+    useEffect(() => {
+        (async () => {
+            try {
+                const res = await API.get("/settings");
+                const merged: any = { ...DEFAULTS, ...(res.data || {}) };
+                setS(merged);
+
+                // Find current theme based on colors or localStorage
+                const storedTheme = localStorage.getItem('current_theme') || 'black';
+                const mappedTheme = LEGACY_THEME_MAP[storedTheme] || storedTheme;
+                const currentTheme = THEME_TEMPLATES.find(template => template.id === mappedTheme) ||
+                    THEME_TEMPLATES.find(template =>
+                        template.home.home_theme_primary === merged.home_theme_primary &&
+                        template.home.home_theme_accent === merged.home_theme_accent
+                    );
+
+                if (currentTheme) {
+                    setSelectedTheme(currentTheme.id);
+                    // Apply theme to DOM
+                    const r = document.documentElement;
+                    r.setAttribute('data-theme', currentTheme.id);
+                    const homeSection = r.querySelector('[data-section="home"]');
+                    const adminSection = r.querySelector('[data-section="admin"]');
+                    if (homeSection) homeSection.setAttribute('data-theme', currentTheme.id);
+                    if (adminSection) adminSection.setAttribute('data-theme', currentTheme.id);
+                }
+            } catch {
+                setS(DEFAULTS);
+            } finally {
+                setLoading(false);
+            }
+        })();
+    }, []);
+
+    const applyTheme = async (themeId: string) => {
+        const theme = THEME_TEMPLATES.find(t => t.id === themeId);
+        if (!theme) return;
+
+        const updatedSettings = {
+            ...s,
+            ...theme.home,
+            ...theme.admin
+        };
+
+        try {
+            await API.put("/settings", updatedSettings);
+            setS(updatedSettings);
+            setSelectedTheme(themeId);
+
+            // Apply CSS variables immediately
+            const r = document.documentElement;
+            r.setAttribute('data-theme', themeId);
+
+            // Update current theme variables based on section
+            const homeSection = r.querySelector('[data-section="home"]');
+            const adminSection = r.querySelector('[data-section="admin"]');
+
+            if (homeSection) {
+                homeSection.setAttribute('data-theme', themeId);
+            }
+            if (adminSection) {
+                adminSection.setAttribute('data-theme', themeId);
+            }
+
+            // Update localStorage
+            Object.entries(updatedSettings).forEach(([key, value]) => {
+                if (key === "social_links") {
+                    localStorage.setItem(key, JSON.stringify(value));
+                } else {
+                    localStorage.setItem(key, String(value));
+                }
+            });
+
+            // Store current theme for both sections
+            localStorage.setItem('current_theme', themeId);
+            localStorage.setItem('current_home_theme', themeId);
+            localStorage.setItem('current_admin_theme', themeId);
+
+            // Notify other components in this tab
+            window.dispatchEvent(new Event('settingsUpdated'));
+
+            setSaved(true);
+            setTimeout(() => setSaved(false), 1800);
+        } catch (err: any) {
+            alert("Error applying theme: " + (err?.response?.data?.message || err.message));
+        }
+    };
+
+    if (loading) return <div style={{ color: "var(--current-text)" }}>Loading settings...</div>;
+
+    return (
+        <div style={{ maxWidth: 1000, margin: "0 auto", padding: "20px" }}>
+            {/* Header */}
+            <div style={{ marginBottom: 32 }}>
+                <button
+                    onClick={() => navigate("/admin/settings")}
+                    style={{
+                        ...backButton,
+                        color: "var(--current-text-secondary)",
+                        border: `1px solid var(--current-card-border)`
+                    }}
+                >
+                    <ArrowLeft size={16} />
+                    Back to Settings
+                </button>
+                <h1 style={{
+                    fontSize: 28,
+                    margin: "16px 0 8px 0",
+                    fontWeight: 600,
+                    color: "var(--current-text)"
+                }}>
+                    Appearance & Themes
+                </h1>
+                <p style={{
+                    color: "var(--current-text-secondary)",
+                    fontSize: 14,
+                    margin: 0
+                }}>
+                    Choose a theme to customize your store's visual design
+                </p>
+            </div>
+
+            {saved && (
+                <div style={{
+                    ...successMessage,
+                    background: "rgba(34,197,94,0.1)",
+                    border: "1px solid rgba(34,197,94,0.3)",
+                    color: "#22c55e"
+                }}>
+                    ✅ Theme applied successfully.
+                </div>
+            )}
+
+            {/* Theme Selection */}
+            <div style={{ ...settingCard, background: "var(--current-card-bg)", border: `1px solid var(--current-card-border)` }}>
+                <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 24 }}>
+                    <Palette size={20} color="var(--current-accent)" />
+                    <h3 style={{ ...sectionTitle, margin: 0, color: "var(--current-text)" }}>Choose Theme</h3>
+                </div>
+                <p style={{
+                    color: "var(--current-text-secondary)",
+                    fontSize: 14,
+                    marginBottom: 24,
+                    lineHeight: 1.5
+                }}>
+                    Select a theme to apply coordinated colors across your entire store. Each theme includes optimized colors for both your storefront and admin panel.
+                </p>
+
+                <div style={{
+                    display: "grid",
+                    gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
+                    gap: 20
+                }}>
+                    {THEME_TEMPLATES.filter(theme => theme.id === 'black' || theme.id === 'light').map((theme) => (
+                        <button
+                            key={theme.id}
+                            onClick={() => applyTheme(theme.id)}
+                            style={{
+                                ...themeCard,
+                                background: "var(--current-card-bg)",
+                                border: selectedTheme === theme.id
+                                    ? `2px solid var(--current-accent)`
+                                    : `1px solid var(--current-card-border)`,
+                                cursor: "pointer",
+                                transition: "all 0.2s ease"
+                            }}
+                            onMouseEnter={(e) => {
+                                if (selectedTheme !== theme.id) {
+                                    e.currentTarget.style.transform = "translateY(-2px)";
+                                    e.currentTarget.style.boxShadow = "0 12px 24px rgba(0,0,0,0.15)";
+                                }
+                            }}
+                            onMouseLeave={(e) => {
+                                if (selectedTheme !== theme.id) {
+                                    e.currentTarget.style.transform = "translateY(0)";
+                                    e.currentTarget.style.boxShadow = "0 4px 12px rgba(0,0,0,0.08)";
+                                }
+                            }}
+                        >
+                            {/* Theme Preview */}
+                            <div style={{
+                                height: 80,
+                                borderRadius: 8,
+                                background: `linear-gradient(135deg, ${theme.preview.background} 0%, ${theme.preview.surface} 100%)`,
+                                border: `1px solid ${theme.preview.primary}20`,
+                                marginBottom: 16,
+                                position: "relative",
+                                overflow: "hidden"
+                            }}>
+                                {/* Mock UI Elements */}
+                                <div style={{
+                                    position: "absolute",
+                                    top: 8,
+                                    left: 8,
+                                    right: 8,
+                                    height: 6,
+                                    background: theme.preview.primary,
+                                    borderRadius: 3,
+                                    opacity: 0.8
+                                }} />
+                                <div style={{
+                                    position: "absolute",
+                                    bottom: 8,
+                                    left: 8,
+                                    width: 40,
+                                    height: 16,
+                                    background: theme.preview.accent,
+                                    borderRadius: 8
+                                }} />
+                                <div style={{
+                                    position: "absolute",
+                                    bottom: 8,
+                                    right: 8,
+                                    width: 60,
+                                    height: 16,
+                                    background: theme.preview.surface,
+                                    border: `1px solid ${theme.preview.primary}30`,
+                                    borderRadius: 8
+                                }} />
+                            </div>
+
+                            {/* Theme Info */}
+                            <div>
+                                <h4 style={{
+                                    margin: "0 0 8px 0",
+                                    fontSize: 16,
+                                    fontWeight: 600,
+                                    color: "var(--current-text)"
+                                }}>
+                                    {theme.name}
+                                </h4>
+                                <p style={{
+                                    margin: 0,
+                                    fontSize: 13,
+                                    color: "var(--current-text-secondary)",
+                                    lineHeight: 1.4
+                                }}>
+                                    {theme.description}
+                                </p>
+                                {selectedTheme === theme.id && (
+                                    <div style={{
+                                        marginTop: 12,
+                                        padding: "4px 8px",
+                                        background: "var(--current-accent)",
+                                        color: "var(--current-text)",
+                                        borderRadius: 4,
+                                        fontSize: 12,
+                                        fontWeight: 500,
+                                        textAlign: "center"
+                                    }}>
+                                        Active Theme
+                                    </div>
+                                )}
+                            </div>
+                        </button>
+                    ))}
+                </div>
+            </div>
+        </div>
+    );
+};
+
+const backButton: React.CSSProperties = {
+    display: "inline-flex",
+    alignItems: "center",
+    gap: 8,
+    padding: "8px 16px",
+    borderRadius: 8,
+    background: "transparent",
+    border: "1px solid transparent",
+    cursor: "pointer",
+    fontSize: 14,
+    fontWeight: 500,
+    transition: "all 0.2s ease",
+    marginBottom: 8
+};
+
+const settingCard: React.CSSProperties = {
+    padding: 24,
+    borderRadius: 12,
+    boxShadow: "0 4px 12px rgba(0,0,0,0.08)"
+};
+
+const sectionTitle: React.CSSProperties = {
+    fontSize: 18,
+    fontWeight: 600,
+    margin: "0 0 20px 0",
+    paddingBottom: 12,
+    borderBottom: "1px solid var(--current-card-border)"
+};
+
+const themeCard: React.CSSProperties = {
+    padding: 20,
+    borderRadius: 12,
+    boxShadow: "0 4px 12px rgba(0,0,0,0.08)",
+    transition: "all 0.2s ease",
+    textAlign: "left"
+};
+
+const successMessage: React.CSSProperties = {
+    padding: 16,
+    borderRadius: 8,
+    marginBottom: 24,
+    fontWeight: 500,
+    textAlign: "center"
+};
+
+export default AppearanceSettings;

@@ -1,0 +1,23 @@
+<svg width="1200" height="800" viewBox="0 0 1200 800" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#2c3e80" />
+      <stop offset="100%" stop-color="#0f172a" />
+    </linearGradient>
+    <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#6366f1" stop-opacity="0.78" />
+      <stop offset="100%" stop-color="#ec4899" stop-opacity="0.18" />
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="800" fill="url(#bg)" />
+  <circle cx="300" cy="260" r="180" fill="#4338ca" fill-opacity="0.15" />
+  <circle cx="950" cy="180" r="120" fill="#8b5cf6" fill-opacity="0.2" />
+  <circle cx="860" cy="600" r="240" fill="#f472b6" fill-opacity="0.12" />
+  <path d="M340 640 C410 520 520 540 590 620 C660 700 780 690 840 620" stroke="#8b5cf6" stroke-width="16" fill="none" stroke-linecap="round" opacity="0.6" />
+  <path d="M180 520 C250 430 340 450 410 520 C480 590 560 560 620 520" stroke="#ec4899" stroke-width="12" fill="none" stroke-linecap="round" opacity="0.5" />
+  <rect x="600" y="310" width="420" height="120" rx="24" fill="url(#grad1)" opacity="0.42" />
+  <rect x="660" y="350" width="240" height="20" rx="10" fill="#fff" opacity="0.24" />
+  <rect x="660" y="390" width="180" height="20" rx="10" fill="#fff" opacity="0.24" />
+  <text x="120" y="200" fill="#ffffff" font-family="Inter, sans-serif" font-size="64" font-weight="700" opacity="0.88">Premium fashion visual</text>
+  <text x="120" y="270" fill="#e2e8f0" font-family="Inter, sans-serif" font-size="24" opacity="0.75">Clean, modern and polished design for your store.</text>
+</svg>

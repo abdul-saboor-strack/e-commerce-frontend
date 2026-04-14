@@ -1,0 +1,369 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap');
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ===== Premium Color System ===== */
+
+:root {
+  /* ===== THEME PALETTES ===== */
+
+  /* Black Mode (Shopify Admin Dark) */
+  --black-bg: #111213;
+  --black-surface: #1f2123;
+  --black-text: #e3e5e7;
+  --black-text-secondary: #999ea4;
+  --black-input-bg: #1f2123;
+  --black-input-border: #313638;
+  --black-input-text: #e3e5e7;
+  --black-button-primary: #00a47c;
+  --black-button-secondary: #313638;
+  --black-card-bg: #1c1e21;
+  --black-card-border: #2e3133;
+  --black-primary: #ffffff;
+  --black-accent: #00a47c;
+
+  /* Light Mode (Shopify Default) */
+  --light-bg: #f4f6f8;
+  --light-surface: #ffffff;
+  --light-text: #202223;
+  --light-text-secondary: #6d7175;
+  --light-input-bg: #ffffff;
+  --light-input-border: #c9cccf;
+  --light-input-text: #202223;
+  --light-button-primary: #008060;
+  --light-button-secondary: #e4e5e7;
+  --light-card-bg: #ffffff;
+  --light-card-border: #e1e3e5;
+  --light-primary: #202223;
+  --light-accent: #008060;
+
+  /* ===== CURRENT THEME VARIABLES (dynamically set) ===== */
+  --current-bg: var(--black-bg);
+  --current-surface: var(--black-surface);
+  --current-text: var(--black-text);
+  --current-text-secondary: var(--black-text-secondary);
+  --current-input-bg: var(--black-input-bg);
+  --current-input-border: var(--black-input-border);
+  --current-input-text: var(--black-input-text);
+  --current-button-primary: var(--black-button-primary);
+  --current-button-secondary: var(--black-button-secondary);
+  --current-button-text: #ffffff;
+  --current-card-bg: var(--black-card-bg);
+  --current-card-border: var(--black-card-border);
+  --current-primary: var(--black-primary);
+  --current-accent: var(--black-accent);
+  --current-header: var(--black-bg);
+  --current-outer-bg: var(--black-bg);
+  --current-success: #22c55e;
+  --current-error: #ef4444;
+  --current-success-rgb: 34, 197, 94;
+  --current-error-rgb: 239, 68, 68;
+
+  /* ===== LEGACY THEME VARIABLES (for backwards compatibility) ===== */
+  --theme-primary: #111827;
+  --theme-accent: #6366f1;
+  --theme-bg: #020617;
+  --theme-surface: #0f172a;
+  --theme-text: #ffffff;
+}
+
+@layer base {
+  html {
+    font-family: 'Poppins', system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji",
+    "Segoe UI Emoji";
+    margin: 0;
+    padding: 0;
+  }
+  body {
+    background: var(--current-bg);
+    color: var(--current-text);
+    @apply antialiased overflow-x-hidden;
+    margin: 0;
+    padding: 0;
+  }
+  * {
+    margin: 0;
+    padding: 0;
+  }
+
+  /* ===== KEYFRAMES FOR GUI POLISH ===== */
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes float {
+    0% { transform: translateY(0px); }
+    50% { transform: translateY(-10px); }
+    100% { transform: translateY(0px); }
+  }
+
+  @keyframes pulseSoft {
+    0% { transform: scale(1); opacity: 0.8; }
+    50% { transform: scale(1.05); opacity: 1; }
+    100% { transform: scale(1); opacity: 0.8; }
+  }
+
+  .animate-fade-in-up {
+    animation: fadeInUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+  
+  .animate-float {
+    animation: float 6s ease-in-out infinite;
+  }
+
+  .animate-pulse-soft {
+    animation: pulseSoft 4s ease-in-out infinite;
+  }
+
+  /* ===== THEME APPLICATION ===== */
+
+  [data-theme="black"] {
+    --current-bg: var(--black-bg);
+    --current-surface: var(--black-surface);
+    --current-text: var(--black-text);
+    --current-text-secondary: var(--black-text-secondary);
+    --current-input-bg: var(--black-input-bg);
+    --current-input-border: var(--black-input-border);
+    --current-input-text: var(--black-input-text);
+    --current-button-primary: var(--black-button-primary);
+    --current-button-secondary: var(--black-button-secondary);
+    --current-button-text: #ffffff;
+    --current-card-bg: var(--black-card-bg);
+    --current-card-border: var(--black-card-border);
+    --current-primary: var(--black-primary);
+    --current-accent: var(--black-accent);
+    --current-header: var(--black-bg);
+    --current-outer-bg: var(--black-bg);
+    --current-success: #22c55e;
+    --current-error: #ef4444;
+    --current-success-rgb: 34, 197, 94;
+    --current-error-rgb: 239, 68, 68;
+  }
+
+  /* Light Mode Theme */
+  [data-theme="light"] {
+    --current-bg: var(--light-bg);
+    --current-surface: var(--light-surface);
+    --current-text: var(--light-text);
+    --current-text-secondary: var(--light-text-secondary);
+    --current-input-bg: var(--light-input-bg);
+    --current-input-border: var(--light-input-border);
+    --current-input-text: var(--light-input-text);
+    --current-button-primary: var(--light-button-primary);
+    --current-button-secondary: var(--light-button-secondary);
+    --current-button-text: #ffffff;
+    --current-card-bg: var(--light-card-bg);
+    --current-card-border: var(--light-card-border);
+    --current-primary: var(--light-primary);
+    --current-accent: var(--light-accent);
+    --current-header: var(--light-bg);
+    --current-outer-bg: var(--light-bg);
+    --current-success: #22c55e;
+    --current-error: #ef4444;
+    --current-success-rgb: 34, 197, 94;
+    --current-error-rgb: 239, 68, 68;
+  }
+
+  /* Home Page Custom Theme */
+  [data-theme="home"] {
+    --current-bg: var(--home-theme-bg);
+    --current-surface: var(--home-theme-surface);
+    --current-text: var(--home-theme-text);
+    --current-text-secondary: var(--home-theme-text-secondary);
+    --current-input-bg: var(--home-theme-input-bg);
+    --current-input-border: var(--home-theme-input-border);
+    --current-input-text: var(--home-theme-input-text);
+    --current-button-primary: var(--home-theme-button-primary);
+    --current-button-secondary: var(--home-theme-button-secondary);
+    --current-button-text: #ffffff;
+    --current-card-bg: var(--home-theme-card-bg);
+    --current-card-border: var(--home-theme-card-border);
+    --current-primary: var(--home-theme-primary);
+    --current-accent: var(--home-theme-accent);
+    --current-header: var(--home-theme-header);
+    --current-outer-bg: var(--home-theme-outer-bg);
+    --current-success: var(--home-theme-success);
+    --current-error: var(--home-theme-error);
+    --current-success-rgb: var(--home-theme-success-rgb);
+    --current-error-rgb: var(--home-theme-error-rgb);
+  }
+
+  /* Admin Page Custom Theme */
+  [data-theme="admin"] {
+    --current-bg: var(--admin-theme-bg);
+    --current-surface: var(--admin-theme-surface);
+    --current-text: var(--admin-theme-text);
+    --current-text-secondary: var(--admin-theme-text-secondary);
+    --current-input-bg: var(--admin-theme-input-bg);
+    --current-input-border: var(--admin-theme-input-border);
+    --current-input-text: var(--admin-theme-input-text);
+    --current-button-primary: var(--admin-theme-button-primary);
+    --current-button-secondary: var(--admin-theme-button-secondary);
+    --current-button-text: #ffffff;
+    --current-card-bg: var(--admin-theme-card-bg);
+    --current-card-border: var(--admin-theme-card-border);
+    --current-primary: var(--admin-theme-primary);
+    --current-accent: var(--admin-theme-accent);
+    --current-header: var(--admin-theme-header);
+    --current-outer-bg: var(--admin-theme-outer-bg);
+    --current-success: var(--admin-theme-success);
+    --current-error: var(--admin-theme-error);
+    --current-success-rgb: var(--admin-theme-success-rgb);
+    --current-error-rgb: var(--admin-theme-error-rgb);
+  }
+
+  /* Default fallback */
+  :not([data-theme]) {
+    --current-bg: var(--black-bg);
+    --current-surface: var(--black-surface);
+    --current-text: var(--black-text);
+    --current-text-secondary: var(--black-text-secondary);
+    --current-input-bg: var(--black-input-bg);
+    --current-input-border: var(--black-input-border);
+    --current-input-text: var(--black-input-text);
+    --current-button-primary: var(--black-button-primary);
+    --current-button-secondary: var(--black-button-secondary);
+    --current-button-text: #ffffff;
+    --current-card-bg: var(--black-card-bg);
+    --current-card-border: var(--black-card-border);
+    --current-primary: var(--black-primary);
+    --current-accent: var(--black-accent);
+    --current-success: #22c55e;
+    --current-error: #ef4444;
+    --current-success-rgb: 34, 197, 94;
+    --current-error-rgb: 239, 68, 68;
+  }
+}
+
+@layer components {
+  .container-max {
+    @apply mx-auto w-full max-w-[1440px] px-4 sm:px-6 lg:px-8 xl:px-10;
+  }
+
+  .glass {
+    @apply bg-white/5 backdrop-blur-2xl border border-white/10;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  }
+
+  .btn-primary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 1.25rem;
+    padding: 0.55rem 1rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+    background: var(--current-button-primary);
+    color: white;
+    transition: all 300ms cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 4px 14px 0 color-mix(in srgb, var(--current-button-primary) 40%, transparent 60%);
+  }
+  .btn-primary:hover { 
+    opacity: 0.95; 
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px 0 color-mix(in srgb, var(--current-button-primary) 60%, transparent 40%);
+  }
+  .btn-primary:active { transform: scale(0.97); }
+
+
+  .btn-ghost {
+    @apply inline-flex items-center justify-center rounded-xl2 px-4 py-2 text-sm font-semibold
+      transition;
+    background: transparent;
+    color: var(--current-text);
+    border: 1px solid var(--current-button-secondary);
+  }
+  .btn-ghost:hover {
+    background: color-mix(in srgb, var(--current-accent) 10%, transparent 90%);
+    color: var(--current-text);
+    border-color: var(--current-accent);
+    transform: translateY(-2px);
+  }
+
+  .input {
+    color-scheme: dark;
+    background: var(--current-input-bg);
+    color: var(--current-input-text);
+    border: 1px solid var(--current-input-border);
+    padding: 0.55rem 1rem;
+    border-radius: 1rem;
+    width: 100%;
+    font-size: 0.875rem;
+    outline: none;
+  }
+  .input::placeholder { color: var(--current-text-secondary); }
+  .input:focus { box-shadow: 0 0 0 3px color-mix(in srgb, var(--current-accent) 35%, transparent 65%); }
+
+
+  .select {
+    /* Keep <select> dropdown readable and theme-aware */
+    color-scheme: dark;
+    background: var(--current-input-bg);
+    color: var(--current-input-text);
+    border: 1px solid var(--current-input-border);
+    padding: 0.55rem 1rem;
+    border-radius: 1rem;
+    width: 100%;
+    font-size: 0.875rem;
+    outline: none;
+  }
+  .select:focus { box-shadow: 0 0 0 3px color-mix(in srgb, var(--current-accent) 35%, transparent 65%); }
+
+
+  .card {
+    border-radius: 1.25rem;
+    background: var(--current-card-bg);
+    border: 1px solid var(--current-card-border);
+    box-shadow: 0 8px 30px rgba(0,0,0,0.12);
+    overflow: hidden;
+    transition: transform 300ms ease, box-shadow 300ms ease;
+  }
+  .card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 20px 40px rgba(0,0,0,0.20);
+  }
+
+  .shadow-soft {
+    box-shadow: 0 20px 60px rgba(15, 23, 42, 0.22);
+  }
+}
+
+/* remove default link underline */
+a {
+  text-decoration: none;
+}
+
+
+/* Theme overrides for form controls (for consistent dropdown readability) */
+.input, .select {
+    /* Keep <select> dropdown readable and theme-aware */
+    color-scheme: dark;
+    background: var(--current-input-bg);
+    color: var(--current-input-text);
+    border: 1px solid var(--current-input-border);
+    padding: 0.55rem 1rem;
+    border-radius: 1rem;
+    width: 100%;
+    font-size: 0.875rem;
+    outline: none;
+  }
+  .select:focus { box-shadow: 0 0 0 3px color-mix(in srgb, var(--current-accent) 35%, transparent 65%); }
+
+
+
+
+@media (min-width: 480px) {
+  .xs\:block { display: block; }
+}
+
+
+button {
+  color: inherit;
+}
+
+button:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+}
