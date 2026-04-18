@@ -39,11 +39,11 @@ const ProductCard: React.FC<Props> = ({ product, onAddToCart, onBuyNow, onQuickV
     <Link to={`/product/${product.id}`} className="block">
       <div className="card group flex h-full w-full flex-col overflow-hidden transition duration-300 hover:-translate-y-0.5 hover:shadow-[0_25px_50px_rgba(0,0,0,0.22)]">
         <div className="relative">
-          <div className="aspect-[4/5] overflow-hidden bg-white/5">
+          <div className="aspect-[4/5] overflow-hidden bg-[var(--current-input-bg)] p-3">
             <img
               src={currentImage}
               alt={product?.name}
-              className={`h-full w-full object-cover transition-all duration-700 ease-out ${product.stock > 0 ? 'group-hover:scale-110' : 'opacity-60'}`}
+              className={`h-full w-full object-contain transition-all duration-500 ease-out ${product.stock > 0 ? '' : 'opacity-60'}`}
               loading="lazy"
             />
 

@@ -199,7 +199,7 @@ export default function StoreHeader({ cartItems = [], wishlist = [] }: { cartIte
                       <img
                         src={suggestion.image}
                         alt={suggestion.name}
-                        className="w-10 h-10 rounded-lg object-cover flex-shrink-0"
+                        className="w-10 h-10 rounded-lg bg-[var(--current-input-bg)] object-contain p-1 flex-shrink-0"
                       />
                     )}
                     <div className="text-left flex-1 min-w-0">

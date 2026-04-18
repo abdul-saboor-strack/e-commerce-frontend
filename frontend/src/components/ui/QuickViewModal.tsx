@@ -102,12 +102,12 @@ export default function QuickViewModal({ product, onClose, onAddToCart }: Props)
         </div>
 
         <div className="grid md:grid-cols-2 gap-0">
-          <div className="bg-black/20 relative">
-            <div className="aspect-[4/5]">
-              <img src={imageSrc} alt={product.name} className="h-full w-full object-cover" />
+          <div className="bg-black/20 relative p-4 md:p-6">
+            <div className="aspect-[4/5] overflow-hidden rounded-2xl bg-[var(--current-input-bg)] p-3">
+              <img src={imageSrc} alt={product.name} className="h-full w-full object-contain" />
             </div>
             {images.length > 1 && (
-              <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex gap-2">
+              <div className="absolute bottom-6 left-1/2 transform -translate-x-1/2 flex gap-2">
                 {images.map((_, index) => (
                   <button
                     key={index}

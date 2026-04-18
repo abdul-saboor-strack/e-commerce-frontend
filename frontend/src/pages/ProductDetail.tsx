@@ -133,7 +133,7 @@ const ProductDetail = () => {
                                     type="button"
                                     onClick={() => setCurrentImage(index)}
                                 >
-                                    <img src={src} alt={`${product.name} ${index + 1}`} className="h-20 w-full object-cover" />
+                                    <img src={src} alt={`${product.name} ${index + 1}`} className="h-20 w-full bg-[var(--current-input-bg)] object-contain p-1" />
                                 </button>
                             ))}
                         </div>

@@ -224,7 +224,12 @@ const AdminProducts = () => {
                             <tr key={p.id}>
                                 <td style={td}>
                                     {p.image && (
-                                        <img src={`http://localhost:5000/uploads/${p.image}`} width={50} />
+                                        <img
+                                            src={`http://localhost:5000/uploads/${p.image}`}
+                                            width={50}
+                                            height={50}
+                                            style={{ objectFit: 'contain', borderRadius: 8, background: 'var(--current-input-bg)', padding: 4 }}
+                                        />
                                     )}
                                 </td>
 
@@ -324,7 +329,12 @@ const AdminProducts = () => {
                         <div style={{ marginTop: 10, display: 'flex', flexWrap: 'wrap', gap: 10 }}>
                             {previews.map((preview, index) => (
                                 <div key={index} style={{ position: 'relative' }}>
-                                    <img src={preview} width={80} height={80} style={{ objectFit: 'cover', borderRadius: 4 }} />
+                                    <img
+                                        src={preview}
+                                        width={80}
+                                        height={80}
+                                        style={{ objectFit: 'contain', borderRadius: 4, background: 'var(--current-input-bg)', padding: 4 }}
+                                    />
                                     <button
                                         onClick={() => removePreview(index)}
                                         style={{

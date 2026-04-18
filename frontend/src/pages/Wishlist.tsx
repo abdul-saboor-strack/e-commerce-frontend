@@ -101,8 +101,11 @@ const card: React.CSSProperties = {
 const image: React.CSSProperties = {
     width: 110,
     height: 110,
-    objectFit: "cover",
-    borderRadius: 12
+    objectFit: "contain",
+    objectPosition: "center",
+    borderRadius: 12,
+    padding: 8,
+    background: "var(--current-input-bg)"
 };
 
 const info: React.CSSProperties = {

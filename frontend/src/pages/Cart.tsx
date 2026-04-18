@@ -35,7 +35,7 @@ const Cart = () => {
                                     <img
                                         src={item.image}
                                         alt={item.name}
-                                        className="h-28 w-full rounded-2xl object-cover sm:w-28"
+                                        className="h-28 w-full rounded-2xl bg-[var(--current-input-bg)] object-contain p-2 sm:w-28"
                                     />
 
                                     <div className="flex-1">
