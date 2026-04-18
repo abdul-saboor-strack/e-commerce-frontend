@@ -86,8 +86,8 @@ const ProductDetail = () => {
                 <ArrowLeft size={18} /> Back to shop
             </button>
 
-            <div className="grid gap-8 lg:grid-cols-[1.3fr_0.7fr]">
-                <div className="rounded-[28px] p-4 shadow-soft" style={{ border: '1px solid var(--current-card-border)', background: 'var(--current-surface)' }}>
+            <div className="grid gap-8 lg:grid-cols-[1.3fr_0.7fr] lg:items-start">
+                <div className="self-start rounded-[28px] p-4 shadow-soft" style={{ border: '1px solid var(--current-card-border)', background: 'var(--current-surface)' }}>
                     <div
                         className="relative overflow-hidden rounded-[28px] bg-black/10"
                         onTouchStart={(e) => setTouchStart(e.touches[0].clientX)}
@@ -97,7 +97,7 @@ const ProductDetail = () => {
                         <img
                             src={images[currentImage]}
                             alt={product.name}
-                            className="h-[520px] w-full object-cover transition duration-300"
+                            className="h-[420px] w-full object-contain transition duration-300 sm:h-[520px]"
                         />
                         {images.length > 1 && (
                             <>
