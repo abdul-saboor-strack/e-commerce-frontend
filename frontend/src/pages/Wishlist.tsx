@@ -1,6 +1,7 @@
 import React from "react";
 import { useCart } from "../store/cartStore";
 import { Trash2, ShoppingBag, HeartOff } from "lucide-react";
+import { getProductImage } from "../utils/productImage";
 
 const WishlistPage = () => {
     const { wishlist, addToCart, removeFromWishlist } = useCart();
@@ -19,7 +20,7 @@ const WishlistPage = () => {
                 <div style={grid}>
                     {wishlist.map(item => (
                         <div key={item.id} style={card}>
-                            <img src={item.image} alt={item.name} style={image} />
+                            <img src={getProductImage(item)} alt={item.name} style={image} />
 
                             <div style={info}>
                                 <h3 style={{ fontSize: 16, fontWeight: 600, marginBottom: 4 }}>{item.name}</h3>

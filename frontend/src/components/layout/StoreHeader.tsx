@@ -3,6 +3,7 @@ import { Heart, Menu, Package, Search, ShoppingBag, User2, X } from "lucide-reac
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useSettings } from "../../hooks/useSettings";
 import API from "../../api/api";
+import { getProductImage } from "../../utils/productImage";
 
 const navLinkBase =
   "inline-flex items-center rounded-full px-4 py-2 text-sm font-semibold transition hover:bg-[color-mix(in_srgb,var(--current-accent)_10%,transparent_90%)] hover:text-[var(--current-text)]";
@@ -68,7 +69,7 @@ export default function StoreHeader({ cartItems = [], wishlist = [] }: { cartIte
         name: p.name,
         category: p.category,
         price: p.price,
-        image: p.image || p.images?.[0]
+        image: getProductImage(p)
       }));
 
     // Add a "View all results" option if there are more matches

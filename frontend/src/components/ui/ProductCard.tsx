@@ -2,6 +2,7 @@ import React, { useMemo, useState } from "react";
 import { Eye, Heart, ShoppingBag } from "lucide-react";
 import { Product } from "../../types/Product";
 import { Link } from "react-router-dom";
+import { FALLBACK_IMAGE, resolveImageSrc } from "../../utils/productImage";
 
 interface Props {
   product: Product;
@@ -24,11 +25,13 @@ const ProductCard: React.FC<Props> = ({ product, onAddToCart, onBuyNow, onQuickV
   const images = useMemo(() => {
     const imgArray = [];
     if (product?.images && product.images.length > 0) {
-      imgArray.push(...product.images);
+      imgArray.push(...product.images.map((img) => resolveImageSrc(img)));
+    } else if (product?.imageUrl) {
+      imgArray.push(resolveImageSrc(product.imageUrl));
     } else if (product?.image) {
-      imgArray.push(product.image);
+      imgArray.push(resolveImageSrc(product.image));
     } else {
-      imgArray.push("https://images.unsplash.com/photo-1520975682031-a9ce0f55c35c?auto=format&fit=crop&w=1200&q=60");
+      imgArray.push(FALLBACK_IMAGE);
     }
     return imgArray;
   }, [product]);

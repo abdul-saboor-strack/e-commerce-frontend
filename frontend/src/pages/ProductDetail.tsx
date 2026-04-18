@@ -4,6 +4,7 @@ import API from "../api/api";
 import { useCart } from "../store/cartStore";
 import { ArrowLeft, ChevronLeft, ChevronRight } from "lucide-react";
 import { Product } from "../types/Product";
+import { FALLBACK_IMAGE, resolveImageSrc } from "../utils/productImage";
 
 const statusLabels = {
     placed: "Placed",
@@ -25,10 +26,11 @@ const ProductDetail = () => {
     const [touchEnd, setTouchEnd] = useState<number | null>(null);
 
     const images = useMemo(() => {
-        if (!product) return ["https://images.unsplash.com/photo-1520975682031-a9ce0f55c35c?auto=format&fit=crop&w=1200&q=60"];
-        const list = product.images?.length ? [...product.images] : [];
-        if (product.image && list.length === 0) list.push(product.image);
-        return list.length ? list : ["https://images.unsplash.com/photo-1520975682031-a9ce0f55c35c?auto=format&fit=crop&w=1200&q=60"];
+        if (!product) return [FALLBACK_IMAGE];
+        const list = product.images?.length ? product.images.map((img) => resolveImageSrc(img)) : [];
+        if (product.imageUrl && list.length === 0) list.push(resolveImageSrc(product.imageUrl));
+        if (product.image && list.length === 0) list.push(resolveImageSrc(product.image));
+        return list.length ? list : [FALLBACK_IMAGE];
     }, [product]);
 
     useEffect(() => {

@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom"
 import { Minus, Plus, Trash2 } from "lucide-react"
 import { useCart } from "../store/cartStore"
+import { getProductImage } from "../utils/productImage"
 
 const Cart = () => {
     const { cartItems, clearCart, removeFromCart, updateQuantity } = useCart()
@@ -33,7 +34,7 @@ const Cart = () => {
                             <div key={item.id} className="card p-4 sm:p-5">
                                 <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
                                     <img
-                                        src={item.image}
+                                        src={getProductImage(item)}
                                         alt={item.name}
                                         className="h-28 w-full rounded-2xl bg-[var(--current-input-bg)] object-contain p-2 sm:w-28"
                                     />

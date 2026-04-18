@@ -3,6 +3,7 @@ export interface Product {
     name: string
     price: number
     image?: string
+    imageUrl?: string
     images?: string[]
     stock: number
     quantity: number

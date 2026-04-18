@@ -1,5 +1,6 @@
 import { createContext, useContext, useState, ReactNode } from "react"
 import { Product } from "../types/Product"
+import { getProductImage } from "../utils/productImage"
 
 interface StoreState {
     cartItems: Product[]
@@ -19,18 +20,29 @@ export function CartProvider({ children }: { children: ReactNode }) {
     const [cartItems, setCartItems] = useState < Product[] > ([])
     const [wishlist, setWishlist] = useState < Product[] > ([])
 
+    const normalizeProductForStore = (product: Product): Product => {
+        const resolvedImage = getProductImage(product as Product & { imageUrl?: string })
+        const images = product.images?.length ? [...product.images] : [resolvedImage]
+        return {
+            ...product,
+            image: resolvedImage,
+            images,
+        }
+    }
+
     const addToCart = (product: Product, qty: number = 1) => {
+        const normalizedProduct = normalizeProductForStore(product)
         setCartItems(prev => {
-            const existing = prev.find(p => p.id === product.id)
+            const existing = prev.find(p => p.id === normalizedProduct.id)
             if (existing) {
                 return prev.map(p =>
-                    p.id === product.id
+                    p.id === normalizedProduct.id
                         ? { ...p, quantity: Math.min(p.quantity + Math.max(1, Number(qty || 1)), p.stock) }
                         : p
                 )
             }
             const safeQty = Math.max(1, Number(qty || 1))
-            return [...prev, { ...product, quantity: Math.min(safeQty, product.stock || safeQty) }]
+            return [...prev, { ...normalizedProduct, quantity: Math.min(safeQty, normalizedProduct.stock || safeQty) }]
         })
     }
 
@@ -49,8 +61,9 @@ export function CartProvider({ children }: { children: ReactNode }) {
     const clearCart = () => setCartItems([])
 
     const addToWishlist = (product: Product) => {
+        const normalizedProduct = normalizeProductForStore(product)
         setWishlist(prev =>
-            prev.find(p => p.id === product.id) ? prev : [...prev, product]
+            prev.find(p => p.id === normalizedProduct.id) ? prev : [...prev, normalizedProduct]
         )
     }
 

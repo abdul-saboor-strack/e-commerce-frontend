@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from "react"
 import API from "../../api/api"
+import { getProductImage, resolveImageSrc } from "../../utils/productImage"
 
 interface Product {
     id: number
     name: string
     price: number
     image: string | null
+    imageUrl?: string | null
     images?: string[] | null
     category_id: number | null
     category_name?: string
@@ -87,9 +89,11 @@ const AdminProducts = () => {
         setStatus(p.status || "active")
         // Handle existing images - now images contains full URLs
         if (p.images && p.images.length > 0) {
-            setPreviews(p.images)
+            setPreviews(p.images.map((img) => resolveImageSrc(img)))
+        } else if (p.imageUrl) {
+            setPreviews([resolveImageSrc(p.imageUrl)])
         } else if (p.image) {
-            setPreviews([p.image.startsWith('http') ? p.image : `http://localhost:5000/uploads/${p.image}`])
+            setPreviews([resolveImageSrc(p.image)])
         } else {
             setPreviews([])
         }
@@ -225,7 +229,7 @@ const AdminProducts = () => {
                                 <td style={td}>
                                     {p.image && (
                                         <img
-                                            src={`http://localhost:5000/uploads/${p.image}`}
+                                            src={getProductImage(p)}
                                             width={50}
                                             height={50}
                                             style={{ objectFit: 'contain', borderRadius: 8, background: 'var(--current-input-bg)', padding: 4 }}

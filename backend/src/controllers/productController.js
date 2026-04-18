@@ -3,10 +3,11 @@ import { Category, Product, Subcategory } from "../models/index.js";
 function withImageUrl(req, product) {
     const p = product.toJSON ? product.toJSON() : product;
     if (p.image && !String(p.image).startsWith("http")) {
-        p.imageUrl = `${req.protocol}://${req.get("host")}/uploads/${p.image}`;
+        p.image = `${req.protocol}://${req.get("host")}/uploads/${p.image}`;
     } else {
-        p.imageUrl = p.image || null;
+        p.image = p.image || null;
     }
+    p.imageUrl = p.image;
     // Handle multiple images - return full URLs in the images field
     if (p.images && Array.isArray(p.images)) {
         p.images = p.images.map(img => {
