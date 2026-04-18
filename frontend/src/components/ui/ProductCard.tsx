@@ -66,7 +66,8 @@ const ProductCard: React.FC<Props> = ({ product, onAddToCart, onBuyNow, onQuickV
               {images.map((_, index) => (
                 <button
                   key={index}
-                  onClick={() => setCurrentImageIndex(index)}
+                  onClick={(e) => handleButtonClick(e, () => setCurrentImageIndex(index))}
+                  type="button"
                   className={`w-2 h-2 rounded-full transition-colors ${index === currentImageIndex ? 'bg-[var(--current-text)]' : 'bg-[var(--current-text-secondary)]/40'
                     }`}
                 />

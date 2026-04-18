@@ -153,7 +153,7 @@ const Checkout = () => {
             <span>Rs {total}</span>
           </div>
           <button className="btn-primary w-full mt-5" onClick={placeOrder} disabled={placing}>
-            {placing ? "Placing…" : "Place order"}
+            {placing ? "Placing..." : "Place order"}
           </button>
           <button className="btn-ghost w-full mt-3" onClick={() => navigate("/cart")}
           >

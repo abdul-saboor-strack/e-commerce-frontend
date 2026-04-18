@@ -10,9 +10,10 @@ interface Product {
     imageUrl?: string | null
     images?: string[] | null
     category_id: number | null
+    subcategory_id?: number | null
     category_name?: string
     stock?: number
-    status?: "active" | "out"
+    status?: "active" | "out_of_stock"
 }
 
 interface Category {
@@ -35,7 +36,7 @@ const AdminProducts = () => {
     const [customCategory, setCustomCategory] = useState("")
     const [customSubcategory, setCustomSubcategory] = useState("")
     const [stock, setStock] = useState("0")
-    const [status, setStatus] = useState<"active" | "out">("active")
+    const [status, setStatus] = useState<"active" | "out_of_stock">("active")
 
     const [images, setImages] = useState<File[]>([])
     const [previews, setPreviews] = useState<string[]>([])
@@ -80,13 +81,11 @@ const AdminProducts = () => {
         setName(p.name)
         setPrice(String(p.price))
         setCategoryId(p.category_id || "")
-        // If product has subcategory_id in DB, API returns it; otherwise keep empty.
-        // @ts-ignore
-        setSubcategoryId((p as any).subcategory_id || "")
+        setSubcategoryId(p.subcategory_id || "")
         setCustomCategory("")
         setCustomSubcategory("")
         setStock(String(p.stock ?? 0))
-        setStatus(p.status || "active")
+        setStatus(p.status === "active" ? "active" : "out_of_stock")
         // Handle existing images - now images contains full URLs
         if (p.images && p.images.length > 0) {
             setPreviews(p.images.map((img) => resolveImageSrc(img)))
@@ -227,7 +226,7 @@ const AdminProducts = () => {
                         {paginated.map(p => (
                             <tr key={p.id}>
                                 <td style={td}>
-                                    {p.image && (
+                                    {(p.image || p.imageUrl || (p.images && p.images.length > 0)) && (
                                         <img
                                             src={getProductImage(p)}
                                             width={50}
@@ -240,7 +239,7 @@ const AdminProducts = () => {
                                 <td style={td}>{p.name}</td>
                                 <td style={td}>Rs {p.price}</td>
                                 <td style={td}>{p.stock ?? 0}</td>
-                                <td style={td}>{p.status === "active" ? "Active" : "Out"}</td>
+                                <td style={td}>{p.status === "active" ? "Active" : "Out of stock"}</td>
 
                                 {/* ✅ CATEGORY SHOW FIXED */}
                                 <td style={td}>
@@ -276,7 +275,7 @@ const AdminProducts = () => {
 
                         <select value={status} onChange={e => setStatus(e.target.value as any)} style={input}>
                             <option value="active">Active</option>
-                            <option value="out">Out of Stock</option>
+                            <option value="out_of_stock">Out of Stock</option>
                         </select>
 
                         {/* ✅ CATEGORY DROPDOWN FIXED */}
@@ -355,7 +354,7 @@ const AdminProducts = () => {
                                             fontSize: 12
                                         }}
                                     >
-                                        ×
+                                        x
                                     </button>
                                 </div>
                             ))}
@@ -456,3 +455,4 @@ const btnCancel = {
     border: "none",
     borderRadius: 8
 }
+

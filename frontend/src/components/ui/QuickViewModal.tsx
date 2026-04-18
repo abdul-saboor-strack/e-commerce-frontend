@@ -203,7 +203,7 @@ export default function QuickViewModal({ product, onClose, onAddToCart }: Props)
                     border: '1px solid var(--current-input-border)',
                     color: 'var(--current-input-text)',
                   }}
-                  placeholder="Share your feedback…"
+                  placeholder="Share your feedback..."
                   value={comment}
                   onChange={(e) => setComment(e.target.value)}
                   rows={3}
